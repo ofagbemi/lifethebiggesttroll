@@ -9,4 +9,4 @@
 
 # Make sure your secret_key_base is kept private
 # if you're sharing your code publicly.
-Lifethebiggesttroll::Application.config.secret_key_base = '4c396fa25a972ff1d82af0f2b248c5370e44437382697b2ab9cd3a3e6a6a430bc953aea447d638f52d3564212d3879abac203a634365e1ed6b62e94cc6cbba3b'
+Lifethebiggesttroll::Application.config.secret_key_base = 'ef55046a87aa52beb8a456f269553f60d97c1bca260572c4e1a390322f4fb56c55dd26c0ce8ce9567c0796b0c3f0fb630ce3a01f2ab03f8a1f066406055d3cca'
