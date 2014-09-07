@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>life: the biggest troll</title>
+    <style>
+      body {
+        background: black;
+        margin: 0;
+      }
+      a {
+        text-decoration: none;
+        color: white;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      #termwrap{
+        position: fixed;
+        top: 400px;
+        background: rgba(0, 0, 0, 0.8);
+        width: 400px;
+        text-align: right;
+        z-index: 48;
+        padding: 4px 20px 4px 40px;
+      }
+      #termwrap #term {
+        font-family: 'Times New Roman', serif;
+        font-size: 24/40px;
+        font-style: italic;
+        line-height: 40px;
+        color: white;
+        font-weight: normal;
+        margin-right: 8px;
+        display: inline-block;
+      }
+      #imageview {
+        display: none;
+        position: fixed;
+        bottom: 0px;
+        right: 0px;
+        z-index: 8;
+        background: rgba(0, 0, 0, 0.8);
+        padding: 8px;
+      }
+      #imageviewimg {
+        max-height: 500px;
+      }
+      #imageviewtermwrapper {
+        position: relative;
+        text-align: center;
+      }
+      #imageviewclose {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        color: white;
+        font-family: 'Times New Roman', serif;
+        font-size: 11px;
+        text-decoration: none;
+      }
+      #imageviewclose:hover {
+        text-decoration: underline;
+      }
+      #imageviewterm {
+        color: white;
+        font-family: 'Times New Roman', serif;
+        font-size: 24px;
+        font-weight: normal;
+        font-style: italic;
+        margin: 0;
+        padding-top: 16px;
+      }
+      .audio_img {
+        min-width: 92px;
+        min-height: 92px;
+        transition: opacity 1s;
+        margin-left: -6px;
+        margin-top: -6px;
+      }
+      .audio_img:hover {
+        opacity: 1.0 !important;
+      }
+      .stage {
+        float: left;
+        width: 80px;
+        height: 80px;
+        overflow: hidden;
+        display: none;
+        text-align: center;
+        cursor: pointer;
+        padding: 6px;
+        
+        transition: background 0.2s;
+      }
+      .stage:hover {
+        background: white;
+      }
+      .stage:hover .stage_term {
+        color: black !important;
+      }
+      .stage_term {
+        color: white;
+        text-decoration: none;
+        font-size: 11px;
+        line-height: 11px;
+        display: none;
+        margin-top: 33px;
+        font-family: 'Helvetica Neue';
+        
+        transition: color 0.4s;
+      }
+      .stage_term:hover {
+        text-decoration: underline;
+      }
+      #showimagewidewrap {
+        position: absolute;
+        top: -36px;
+        right:8px;
+        background: black;
+        border: dotted white 1px;
+        padding: 11px 16px;
+        
+        transition: top 0.4s;
+      }
+      #showimagewidewrap:hover {
+        top: 8px;
+      }
+      #showimagewidewrapwrap {
+       position: relative;
+       z-index: 44;
+      }
+      #showimagewide {
+        font-size: 24px;
+        line-height: 24px;
+        color: black;
+        transition: color 0.4s;
+      }
+      #showimagewide:hover {
+        color: white;
+        text-decoration: none;
+      }
+      #imagewidestage {
+        background: black;
+        border: dotted 1px white;
+        position: fixed;
+        padding: 20px;
+      }
+      #screen {
+        opacity: 0.8;
+        background: black;
+        position: fixed;
+      }
+      #screenwrap {
+        position: relative;
+        display: none;
+        z-index: 32;
+      }
+      #imagewidestagewrap {
+        position: relative;
+        z-index: 40;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="screenwrap">
+      <div id="screen">
+      </div>
+    </div>
+    <div id="imagewidestagewrap">
+      <div id="imagewidestage">
+        <img id="imagewidestageimg">
+      </div>
+    </div>
+    <audio id="song">
+      <source type="audio/mpeg" src="audio/lifethebiggesttroll.mp3">
+      <source type="audio/aac" src="audio/lifethebiggesttroll.m4a">
+      <source type="audio/wav" src="audio/lifethebiggesttroll.wav">
+    </audio>
+    
+    <div id="showimagewidewrapwrap">
+      <div id="showimagewidewrap">
+        <a id="showimagewide" href="#">!</a>
+      </div>
+    </div>
+    <div id="imageview">
+      <div id="imageviewtermwrapper">
+        <a href="#" id="imageviewclose" onclick="closeimageview()">close</a>
+        <h1 id="imageviewterm"></h1>
+      </div>
+      <img id="imageviewimg" src="imgs/loading.gif">
+    </div>
+    
+    <div id="wrapper">
+<!--
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img0" term="Linnea Myhre" src="http://ubok.no/media/Linnea%20Myhre.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img1" term="Linnea Myhre" src="https://studentersamfundet.no/wp/wp-content/uploads/2013/08/Myhre_4412683a.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img2" term="Kilchberger Schwinget" src="http://www.kilchberger-schwinget.ch/pictures/schwinget3.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img3" term="Kilchberger Schwinget" src="http://www.schlussgang.ch/sites/default/files/styles/article_detail/public/sg_2014_06_17_40-arena2002.jpg?itok=JuYnzMyL"></div>
+-->
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img4" term="Kilchberger Schwinget" src="http://www.kilchberger-schwinget.ch/pictures/schwinget2.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img5" term="جون ريفرز" src="http://www.washwasha.org/wp-content/uploads/2014/03/%D8%AC%D9%88%D9%86-%D8%B1%D9%8A%D9%81%D8%B1%D8%B2.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img6" term="地溝油" src="http://img3.wikia.nocookie.net/__cb20100923080542/zh.uncyclopedia/images/6/65/%E5%9C%B0%E6%B2%9F%E6%B2%B97.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img7" term="義美" src="http://upload.wikimedia.org/wikipedia/zh/6/6d/IMEI_Logo.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img8" term="地溝油" src="http://www.hb.xinhuanet.com/zhuanti/xin_1130307221431265245146.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img9" term="ประยุทธ์ จันทร์โอชา" src="http://www.bloggang.com/data/p/peatwalker/picture/1400919745.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img10" term="Steven Sotloff" src="http://timedotcom.files.wordpress.com/2014/09/setven-setlof.jpg?w=814"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img11" term="Mam Talent" src="http://upload.wikimedia.org/wikipedia/en/c/c6/Mam_talent!_logo.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img12" term="الكهرباء" src="http://www.altahrir.com/uploads/images/160309.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img13" term="דאעש" src="http://www.nrg.co.il/images/archive/465x349/1/573/342.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img14" term="Ελλαδα Αργεντινη Μπασκετ" src="http://www.zougla.gr/assets/images/1480044.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img15" term="Caroline Berg Eriksen" src="http://i.huffpost.com/gen/1493512/thumbs/o-CAROLINE-BERG-ERIKSEN-facebook.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img16" term="Ariana Grande" src="http://wac.450f.edgecastcdn.net/80450F/popcrush.com/files/2014/04/ariana-grande.jpg?w=300"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img17" term="유출" src="http://cfile10.uf.tistory.com/image/180A704350514E2B020ECC"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img18" term="Transfer News" src="http://i3.mirror.co.uk/incoming/article2027747.ece/alternates/s615/Live-blog-transfer-news-620.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img19" term="マイケル・チャン" src="http://www.tennis-japan.com/chang/topimg/trophy.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img20" term="1 сентября" src="http://bygaga.com.ua/uploads/posts/1345793237_kartinki_na_1_sentyabrya_45_789-20.gif"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img21" term="Paty Chapoy" src="http://blu.stb.s-msn.com/i/50/B43AFA1318B30D94F146B7D72C590.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img22" term="Vuelta" src="http://biciplan.com/blog/wp-content/uploads/2014/08/nhhoteles.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img23" term="Uhuru Kenyatta" src="http://upload.wikimedia.org/wikipedia/commons/b/bb/Uhuru_Kenyatta_Official.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img24" term="NFL" src="https://pbs.twimg.com/profile_images/478956593820618752/kvqPokJj.jpeg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img25" term="Moto X" src="http://www.wired.com/reviews/wp-content/uploads/2013/08/20130802-MOTO-X-061edit.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img26" term="Prima" src="http://www.danacountryman.com/Prima/BigPrima.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img27" term="葡萄姐" src="http://www.ltn.com.tw/2014/new/sep/6/images/bigPic/400_400/php3hUcWL.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img28" term="Galaxy Note 4" src="http://cdn.gottabemobile.com/wp-content/uploads/2014/02/Samsung-Galaxy-Note-3-vs-Galaxy-S5-comparison.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img29" term="Κηδεια Βαρδη" src="http://www.thetoc.gr/images/articles/1/article_35811/apokleietai-na-min-pigaina-stin-kideia-bardi.w_l.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img30" term="Skyfall" src="http://www.comingsoon.net/gallery/56251/Skyfall_62.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img31" term="三吉彩花" src="http://img.amuse.co.jp/artistfile/000199/profile/photo_01.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img32" term="Nanosilver" src="http://theholisticdentist.files.wordpress.com/2010/07/nanosilver.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img33" term="Murio Ceratti" src="http://www.hoy.com.ec/wp-content/uploads/2010/09/noticiaceratti.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img34" term="Bafana Bafana" src="http://www.cellubeauty.com/wp-content/uploads/2013/01/Bafana.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img35" term="Kiraz Mevsimi 9. Bölü" src="http://i6.imgiz.com/rshots/7632/kiraz-mevsimi-3-bolum-fragmani_7632837-5332_640x360.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img36" term="Zlatan" src="http://upload.wikimedia.org/wikipedia/commons/b/b0/Zlatan_Ibrahimovi%C4%87-6.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img37" term="Galaxy Note 4" src="http://i-cdn.phonearena.com/images/articles/129715-thumb/note-4-curvedglass.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img38" term="Nairo Quintana" src="http://upload.wikimedia.org/wikipedia/commons/b/bb/Nairo_Quintana,_Vuelta_al_Pais_Vasco_2013_(cropped).jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img39" term="spring" src="http://upload.wikimedia.org/wikipedia/commons/9/92/Colorful_spring_garden.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img40" term="Ladies Code" src="http://www.gokpop.com/i1/artists/hero/2/1467-ladiescode-niu3.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img41" term="Paty Chapoy" src="http://3.bp.blogspot.com/_0Cff60BlkrM/TPSRPc58heI/AAAAAAAAABg/r1qagV9GQN0/s1600/paty-chapoy-0.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img42" term="Scharia Polizei" src="http://bilder.bild.de/fotos-skaliert/scharia-westen_40650410_mbqf-37541120/2,c=0,w=985.bild.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img43" term="Carl Frampton" src="http://behindthegloves.com/site/wp-content/uploads/2014/08/Carl-Frampton.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img44" term="ä" src="http://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Hoeffler_%C3%84.svg/256px-Hoeffler_%C3%84.svg.png"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img45" term="ประยุทธ์ จันทร์โอชา" src="http://static.naewna.com/uploads/userfiles/images/C_1-P_3-%E0%B8%9E%E0%B8%A5_%E0%B8%AD(1).jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img46" term="Taken 2" src="http://ia.media-imdb.com/images/M/MV5BMTkwNTQ0ODExOV5BMl5BanBnXkFtZTcwNjU3NDQwOA@@._V1_SX640_SY720_.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img47" term="Dolomitenmann" src="http://www.redbull.com/cs/RedBull/RBImages/000/000/529/813/photo610x343a/Dolomitenmann.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img48" term="Prima" src="http://mixmatters.com/uploads/artist/image/752/prima-j.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img49" term="Komiprisen 2014" src="http://gfx.nrk.no//Lepvq38Ci_IKfBl90oV36AkOmEQxVAKz-r5tzbGed9Sw"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img50" term="lupus" src="http://graphics8.nytimes.com/images/2007/08/01/health/adam/17134.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img51" term="דאעש" src="http://www.news1.co.il/uploadimages/NEWS1-13-451046168804169.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img52" term="Cambio de hora en Chile" src="http://www.24horas.cl/nacional/article831160.ece/ALTERNATES/w1024/Cambia+la+hora%3A+este+s%C3%A1bado+parte+el+horario+de+verano"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img53" term="คลิปอ้อนแฟน" src="http://pe2.isanook.com/ns/0/ud/332/1662353/6.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img54" term="Mary Kom" src="http://sylc.info/wp-content/uploads/2014/08/Pics.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img55" term="陳喬恩" src="http://img1.bbs.163.com/new/20100121/tvb/ki/kitjianjie/ba09a31e41a02016b8bb8e0c4e985be9.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img56" term="ตรวจ" src="http://www.tru.ac.th/audit/imageaudit/inernal-audit.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img57" term="로또" src="http://www.lotto5.co.kr/M/hitnews/images/13_images/a_4.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img58" term="Note 4" src="http://inavitnews.com/wp-content/uploads/2014/07/Samsung-Galaxy-Note-4-Youm.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img59" term="รางวัลที่" src="http://sv6.postjung.com/wb/data/577/577697-topic-ix-0.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img60" term="Gol Caracol" src="https://lh6.googleusercontent.com/-kIz6dO682LQ/AAAAAAAAAAI/AAAAAAAAu4Y/1PWzHT8GO3c/photo.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img61" term="張家輝" src="http://kenshin.hk/blog/growth/cheung-06.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img62" term="Polska Wenezuela" src="http://bi.gazeta.pl/im/bf/e8/fc/z16574655Q,Polska---Wenezuela-za-darmo--Gdzie-obejrzec-mecz-n.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img63" term="Galaxy Note 4" src="http://galaxynote4update.com/wp-content/uploads/2014/06/Samsung-Galaxy-Note-4.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img64" term="جون ريفرز" src="http://cdn.nc.slabnews.com/public/uploads/images/85588122531771660.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img65" term="Black Adam" src="http://upload.wikimedia.org/wikipedia/en/1/1e/Blackadam52.PNG"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img66" term="BB Sophia" src="http://d2.dn-static.se/UploadedImages/2014/1/13/50aae98b-d41c-4b6d-85b5-465d15952b40/original.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img67" term="BB Sophia" src="http://www.bbsophia.se/Global/BB%20Sophia/Foton/Toppbild%20880x440/rum_sang_fatolj_880x440.jpg?preset=880"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img68" term="Komiprisen 2014" src="http://gfx.nrk.no//cdEJsReI5Zz4jaTCoLItHQjU_IOYZxGNjfVcFRUTrqIg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img69" term="Hot Sale" src="http://thumbs.dreamstime.com/z/fiery-hot-sale-design-template-eps-vector-32181313.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img70" term="מני פאר" src="http://www.ynet.co.il/PicServer4/2014/04/15/5273642/52736410990100490652no.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img71" term="Caroline Berg Eriksen" src="http://gfx.dagbladet.no/labrador/225/225867/22586769/jpg/active/978x.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img72" term="周永恆" src="http://www.gospelherald.com.hk/files/cul/cul_20140830_16.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img73" term="Acesso Ao Ensino Superior" src="http://www.dges.mctes.pt/NR/rdonlyres/B32ADF2F-742C-4AFA-81EC-60D383CF56A7/1989/DiagramadeAcessocomcoresMpq2.gif"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img74" term="City Container" src="http://upload.wikimedia.org/wikipedia/commons/e/e2/Cmglee_Container_City_2.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img75" term="James Franco" src="http://ia.media-imdb.com/images/M/MV5BMTIyOTc0MjE5NV5BMl5BanBnXkFtZTcwNjgyODQwMg@@._V1_SX640_SY720_.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img76" term="Joko gegen Klaas" src="http://www.prosieben.de/var/prosieben/storage/images/tv/joko-gegen-klaas/bilder/joko-gegen-klaas-das-duell-um-die-welt-allgemein/joko-und-klaas-faust/1252705-1-ger-DE/Joko-und-Klaas-Faust_teaser_620x348.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img77" term="Nono" src="http://www2.cincinnati.com/blogs/cincychic/files/2013/06/no_no_silver.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img78" term="Belotti" src="http://www.gianlucadimarzio.com/wp-content/uploads/2013/10/andrea-belotti1.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img79" term="Mark Gil" src="http://philippinesdaily.org/wp-content/uploads/2014/09/mark-gil.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img80" term="Star Magic Ball 2014" src="http://static.rappler.com/images/starmagicball-20130908-01.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img81" term="Ká" src="http://1.bp.blogspot.com/_LA_Mg337cjY/S764BrJOXtI/AAAAAAAAANs/f-vvFOtzHrM/s1600/k%C3%A1+4+portas.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img82" term="Murio Ceratti" src="http://www.elvacanudo.cl/sites/elvacanudo.cl/files/imagecache/380x285/imagen_noticia/gustavo_cerati_grave_enfermo_0.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img83" term="Jessica Brown Findlay" src="http://ia.media-imdb.com/images/M/MV5BMTM2NDQ2MjUzOV5BMl5BanBnXkFtZTcwNzI5ODYxNA@@._V1_SY400_SX267_AL_.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img84" term="خالد السرجاني" src="http://img.youm7.com/images/NewsPics/large/S6201312135815.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img85" term="Ladies Code" src="http://static1.allkpop.com/upload/2013/09/af_org/ladies-code_1378347231_af_org.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img86" term="Black Adam" src="http://img1.wikia.nocookie.net/__cb20130925203902/marvel_dc/images/c/c9/Justice_League_of_America_Vol_3_7.4_Black_Adam_Textless.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img87" term="Elizabeth Hurley" src="http://upload.wikimedia.org/wikipedia/commons/6/66/Elizabeth_Hurley08.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img88" term="Annie Löö" src="http://a3.mndcdn.com/image/upload/t_next_gen_span3_padding_4_3/p61osdluklkbku1a0joz.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img89" term="Moto X" src="http://rack.0.mshcdn.com/media/ZgkyMDEzLzA4LzAxL2FmL21vdG94ZXZlbnQyLmIyODYxLmpwZwpwCXRodW1iCTg1MHg4NTA-CmUJanBn/c649ed87/009/moto-x-event-24-of-31.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img90" term="Seleccion Colombia" src="http://comutricolor.com/wp-content/uploads/2013/09/139911_ampliada.jpg_cc4b217e066768d053c30e43d8ecc712.png"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img91" term="جون ريفرز" src="http://www.washwasha.org/wp-content/uploads/2014/03/%D8%AC%D9%88%D9%86-%D8%B1%D9%8A%D9%81%D8%B1%D8%B2-1.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img92" term="مباراة مصر والسنغال" src="http://www.dostor.org/upload/photo/news/65/4/500x282o/576.jpg?q=2"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img93" term="Tony Hawk" src="http://visionaryartistrymag.com/wp-content/uploads/2011/01/Tony-Hawk.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img94" term="Banco De Bogota" src="http://kb.centrocomercialsantafe.com/Resources/Images/Logo/F/1/B/6/f1b6fa78-7094-4bf2-aa1e-88e94b5bea46.png"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img95" term="Royal Adelaide Show" src="http://www.morish.com.au/Images/Blog%20Photo%20Gallery/showrides.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img96" term="Louis Otieno" src="https://www.kenya-today.com/wp-content/uploads/2014/09/200x192x13.png.pagespeed.ic.mLRXlyKEG0.png"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img97" term="義美" src="http://photo.518.com.tw/photo/2/9/107901/13046517641086363165.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img98" term="Galaxy Note 4" src="http://airherald.com/wp-content/uploads/2014/06/Samsung-Galaxy-Note-4-Rumors-Reports.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img99" term="Ceratti" src="http://2.bp.blogspot.com/_YWaNFkS6wQw/S3h8Z87eNsI/AAAAAAAAJL4/1tPx8CzL3Os/s200/Ceratti.htm.png"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img100" term="siatkó" src="http://i.ytimg.com/vi/ROlQcz3btDs/0.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img101" term="Galaxy Note 4" src="http://cdn.gottabemobile.com/wp-content/uploads/2014/02/Samsung-Galaxy-Note-3-vs-Galaxy-S5-comparison.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img102" term="ТНТ" src="http://univertv.org/uploads/posts/2011-12/1323557210_Logo_TNT1.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img103" term="Tomorrowland Brasil" src="http://www.tomorrowlandbrasil.com/sites/default/files/styles/stacked_page_carousel/public/media/Galleries/Tomorrowland%20Belgium/4.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img104" term="유출" src="http://dimg.donga.com/wps/SPORTS/IMAGE/2011/05/07/37000162.2.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img105" term="Uhuru Kenyatta" src="http://jamhurimagazine.com/thumbnail.php?file=Uhuru_M_Kenyatta_685841119.jpg&size=article_large"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img106" term="Moto X" src="http://cdn1.xda-developers.com/devdb/deviceForum/screenshots/2449/20130906T110847.png"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img107" term="Astro Awani" src="http://img.astroawani.com/2013-04/61365010299_295x200.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img108" term="Czeizel Endre" src="http://www.parameter.sk/sites/default/files/itthon/czeizel.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img109" term="Galaxy Note Edge" src="http://i1.cdnds.net/14/31/618x392/tech-samsung-galaxy-note-4-3.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img110" term="Teachers Day" src="http://www.techdroll.com/wp-content/uploads/2014/09/teachers-day-greeting-1.gif"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img111" term="Tough Viking" src="http://toughviking.se/wp-content/uploads/2013/06/ToughVikingSuperFinalEnglish8_logo_secret.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img112" term="로또" src="http://cfile3.uf.tistory.com/image/2708DE37540272061DA079"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img113" term="Loic Remy" src="http://footballleagueworld.co.uk/wp-content/uploads/2014/04/Loic-Remy-QPR-1.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img114" term="Black Adam" src="http://upload.wikimedia.org/wikipedia/en/2/22/Cap_adam.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img115" term="Μαρία Σταυρινούδη-Σόδη" src="http://www.newsbeast.gr/files/temp/98AAAD7C5F4CEC4C533B63EC31F0F2FC.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img116" term="Catch the Millionaire" src="http://www.hna.de/bilder/2013/07/16/3008899/1781499385-catch_millionaire_dpa_20130716-170842-jh34.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img117" term="ออมสิน" src="http://www.dailygizmo.tv/wp-content/uploads/2008/01/hungry_bank_1.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img118" term="Memorial Van Damme" src="http://www.sport.be/aginsurancememorialvandamme/taalkeuze.jpg?1=21022014"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img119" term="CFL" src="http://www.delhi.gov.in/wps/wcm/connect/627259004f021d908a30aeb60aeecb21/CFL.bmp?MOD=AJPERES&lmod=-332142862&CACHEID=627259004f021d908a30aeb60aeecb21"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img120" term="Bethany Mota" src="http://images6.fanpop.com/image/photos/32900000/-bethany-mota-32927554-500-500.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img121" term="Angela Souza" src="http://extra.globo.com/incoming/7881539-cf2-232/w448/bailarina-namorada-do-yuri.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img122" term="جون ريفرز" src="http://www.araa.com/data/large_thumbs/16_04_13_035849_1887381.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img123" term="Jessica Brown Findlay" src="http://www.fansshare.com/photos/jessicabrownfindlay/jessica-brown-findlay-gossip-299382276.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img124" term="דאעש" src="http://msc.wcdn.co.il/w/f-466/1694276-5.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img125" term="Akita" src="http://upload.wikimedia.org/wikipedia/commons/7/78/Akita_inu.jpeg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img126" term="NLEx Traffic" src="http://static.rappler.com/images/nlex-accident-traffic-20130223.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img127" term="Roskilde Festival" src="http://cbslife.dk/wp-content/uploads/2014/07/roskilde-festival.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img128" term="イスラム国" src="http://blog-imgs-70-origin.fc2.com/t/i/r/tirashinoshita/BtsK2KOCQAIiQrq.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img129" term="Balotelli" src="http://footygist.com/wp-content/uploads/Mario-Balotelli-Football-Wallpaper-711.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img130" term="Jennifer Lawrence" src="http://www.contactmusic.com/pics/ln/20130518/180513_cff_catching_fire_photocall_3/jennifer-lawrence-66th-cannes-film-festival_3670844.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img131" term="Acesso Ao Ensino Superior" src="http://www.cienciahoje.pt/files/42/4228.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img132" term="Isis" src="http://www.longwarjournal.org/assets_c/2014/06/ISIS-Ninewa-photos-Jun24-16-thumb-560x315-3319.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img133" term="義美" src="http://homu.komica.org/38/src/1409900821795.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img134" term="Ricky Rubio" src="http://a.espncdn.com/combiner/i?img=/i/headshots/nba/players/full/4011.png&w=350&h=254"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img135" term="Узнай Меня Если Сможешь" src="http://pechenik.net/uploads/posts/2014-08/1409505830_iphone360_840655.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img136" term="Fü" src="http://hairmedclinics.com/wp-content/uploads/2013/02/fue3_big2.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img137" term="Transfer News" src="http://cdn.images.express.co.uk/img/dynamic/67/590x/secondary/105487.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img138" term="McKayla Maroney" src="http://upload.wikimedia.org/wikipedia/commons/6/66/McKayla_Maroney_-_White_House_2012-Nov-15_-cropped,_retouched.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img139" term="Deutschland" src="http://upload.wikimedia.org/wikipedia/commons/4/4a/Deutschland_politisch_2010.png"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img140" term="Alibaba" src="http://idea4industry.com/images/uploads/events/alibaba_(1).jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img141" term="1 сентября" src="http://bygaga.com.ua/uploads/posts/2013-08/1375807329_otkritki_i_kartinki_na_1_sentyabrya_56-36.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img142" term="Beskydská sedmič" src="http://i.ytimg.com/vi/OZMqxe0ZXe8/default.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img143" term="lupus" src="http://www.cedars-sinai.edu/Patients/Health-Conditions/Images/351457_Lupus-1.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img144" term="Persiana americana" src="https://c2.staticflickr.com/8/7178/6882577656_5e517b8c7a_z.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img145" term="Match France Espagne" src="http://www.sport.fr/photos/l-equipe-de-france-de-football-espagne-france-les-notes-du-match-268569.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img146" term="click" src="http://ia.media-imdb.com/images/M/MV5BMjEyODM5MzY2N15BMl5BanBnXkFtZTcwNjcyMTIzMQ@@._V1_SX640_SY720_.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img147" term="Αντωνησ Βαρδησ" src="http://a.media.gossip-tv.gr/items/cache/94bd0efda97ed1ff73845324973ed7d4_L.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img148" term="Nainggolan" src="http://www.sempreinter.com/wp-content/uploads/2013/06/Nainggolan-3.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img149" term="아리아나 그란데" src="http://file1.bobaedream.co.kr/multi_image/strange/2013/06/04/12/CQ051ad5dd7ea199.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img150" term="イスラム国" src="http://japanese.irib.ir/media/k2/items/cache/4113e93b1e15abf37291ebc5fca31164_XL.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img151" term="Teachers Day Quote" src="http://happyteachersdayquotes.in/wp-content/uploads/2014/08/teachers_day_cards1.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img152" term="憶霖" src="http://trade.1111.com.tw/Include/getPhoto.ashx?vNo=28485&vType=1"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img153" term="Dian" src="http://www.name-list.net/img/images.php/Dian_1.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img154" term="De Redactie" src="http://upload.wikimedia.org/wikipedia/commons/7/7f/Deredactie.png"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img155" term="Komiprisen 2014" src="http://gfx.nrk.no//wkdFbRJjhWPXPwxY3p3QiAE2gNNVuOSBkBS8q9tI0h0A"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img156" term="Sabine Uitslag" src="http://upload.wikimedia.org/wikipedia/commons/d/d9/Sabine_Uitslag.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img157" term="Tough Viking" src="http://cache3.asset-cache.net/gc/179190898-people-react-during-the-10000-volt-obstacle-gettyimages.jpg?v=1&c=IWSAsset&k=2&d=GkZZ8bf5zL1ZiijUmxa7QSu3YUq9QsI0RdAQL3IQdgPa1iM8M2jmR3gUctD3l237%2FRfhFFqjd%2BeZw9JcEJabGQ%3D%3D"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img158" term="Dian" src="http://www.name-list.net/img/images.php/Dian_6.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img159" term="Iggy Azalea" src="http://upload.wikimedia.org/wikipedia/commons/b/b0/Iggy_Azalea_Walks_the_Red_Carpet_(cropped).jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img160" term="秦昊" src="http://lady.shangdu.com/d/file/entertainment/gossip/mingxingbagua/2014-01-25/d12e5fe0d081f01f570be0ebf113bc99.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img161" term="Kiraz Mevsimi 9. Bölü" src="http://imgz.pivol.com/dizifilm/imgsdisk/2014/08/20/200820141416304798403.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img162" term="หวย" src="http://lottosanook.com/wp-content/uploads/2013/08/%E0%B9%80%E0%B8%81%E0%B9%87%E0%B8%9A%E0%B8%95%E0%B8%81%E0%B8%AB%E0%B8%A7%E0%B8%A21%E0%B8%AA%E0%B8%8456-2.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img163" term="รางวัลที่" src="http://news.tlcthai.com/wp-content/uploads/2011/11/lottery2-1611.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img164" term="Petteri Koponen" src="http://upload.wikimedia.org/wikipedia/commons/6/6d/Petteri_Koponen_Honka_2006-2007.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img165" term="Nigeria Vs Congo" src="http://talkmedianigeria.com/storage/2013/03/caf-u20.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img166" term="Caroline Berg Eriksen" src="http://resources0.news.com.au/images/2013/12/01/1226772/303144-26bdb208-5a18-11e3-b7ab-c407036b0b36.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img167" term="جون ريفرز" src="http://www.washwasha.org/wp-content/uploads/2014/03/%D8%AC%D9%88%D9%86-%D8%B1%D9%8A%D9%81%D8%B1%D8%B2.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img168" term="Linnea Myhre" src="http://gfx.dagbladet.no/labrador/172/172033/17203373/jpg/active/978x.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img169" term="Kilchberger Schwinget" src="http://f.blick.ch/img/aktuell/crop1150262/1632815929-chorizontal-w308/Kilchberger.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img170" term="Linnea Myhre" src="http://gfx.dagbladet.no/labrador/154/154430/15443030/jpg/active/978x.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img171" term="Linnea Myhre" src="http://ubok.no/media/Linnea%20Myhre.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img172" term="Bafana Bafana" src="http://www.sabc.co.za/wps/wcm/connect/fb617b0042882f8fa73cff56d5ffbd92/bafana(P).jpg?MOD=AJPERES&CACHEID=fb617b0042882f8fa73cff56d5ffbd92"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img173" term="BPJS" src="http://tabloidjubi.com/en/wp-content/uploads/2014/02/Logo-BPJS-Foto-setkab.go_.id_.gif"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img174" term="Valeurs actuelles" src="http://www.slate.fr/sites/default/files/photos/VAIslam5.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img175" term="류현진" src="http://cfile27.uf.tistory.com/image/2468183953841BA83146A0"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img176" term="American Apparel" src="http://i.americanapparel.net/presscenter/adarchive/popups/american-apparel-ad-Vice-UK-kyung-200207.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img177" term="CSM" src="http://upload.wikimedia.org/wikipedia/en/e/e7/TAMU-09-Cadet-CSM.JPG"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img178" term="Gmail" src="http://photos.appleinsider.com/gmail-130828.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img179" term="TIFF" src="http://www.coolutils.com/img/ConvertPDDtoTIFF1.gif"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img180" term="The Voice of Poland" src="http://przeambitni.com/wp-content/uploads/2014/02/the-voice-of-poland-4b-ekipa.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img181" term="Avicii" src="http://www.billboard.com/files/styles/promo_650/public/media/avicii-press-photo-alex-wessely-650-430.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img182" term="Андрей Стенин" src="http://img1.1tv.ru/imgsize640x360/PR20140808150424.JPG"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img183" term="خالد السرجاني" src="http://cdn1.albayan.ae/polopoly_fs/1.207.1291907594!/image/1172240243.png"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img184" term="Czeizel Endre" src="http://www.storyonline.hu/data/sztarlexikon/kepek/t649_203.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img185" term="جون ريفرز" src="http://cdn.nc.slabnews.com/public/uploads/images/85588122531771660.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img186" term="유출" src="http://www.kwnews.co.kr/photo.asp?number=209091400177&ext=jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img187" term="Paty Chapoy" src="http://media.tumblr.com/210bca5649a3cd38dbb149bf06867010/tumblr_inline_n622bzVNQ51swndv6.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img188" term="Dolomitenmann" src="http://www.redbull.com/cs/RedBull/RBImages/000/000/140/986/photo610x343a/060908MS38.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img189" term="ประยุทธ์ จันทร์โอชา" src="http://people.mthai.com/wp-content/uploads/2014/05/po000117.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img190" term="Sophie Elise" src="http://www.cdn.tv2.no/images/?imageId=5205880&width=974.07675906183&height=548.17723994012&x=0&y=0&cropw=100&croph=100.04728132387706&digest=7d7d2f5070"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img191" term="BRI" src="http://wake.victoriaskimboards.com/wp-content/uploads/2012/12/Bri_Chmel_21.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img192" term="ตรวจ" src="http://www.it24hrs.com/wp-content/uploads/2011/09/logo_Anit-Kobpae.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img193" term="Fü" src="http://users.atw.hu/szenvedely/images/f%C3%BC.gif"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img194" term="Balesin Island" src="http://www.balesin.com/uploads/pics/ABICMAPWeb_v2_010313_ACM.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img195" term="地溝油" src="http://www.e-zone.com.hk/discuz/attachment.php?aid=37728&nothumb=yes"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img196" term="Match France Espagne" src="http://images.lindependant.fr/images/2013/03/26/suivez-en-direct-le-match-france-espagne_292799_516x343.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img197" term="Terelu Campos" src="http://www.estarguapas.com/gallery/la-presentadora-terelu-campos-_54365589619_54028874188_960_639.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img198" term="click" src="http://content9.flixster.com/movie/11/16/98/11169895_det.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img199" term="โฬม" src="http://images.thaiza.com/4/4_20110622103825..jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img200" term="Galaxy Note Edge" src="http://9to5google.files.wordpress.com/2013/11/samsung-ces-2013-curved-oled-phone-front.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img201" term="Apáczai Kiadó" src="http://feol.hu/data/cikk/153/8504/cikk_1538504/ap1.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img202" term="Agnieszka Sienkiewicz" src="http://www.zeberka.pl/img_new/2013/09/sienkiewicz-R1.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img203" term="EPL" src="https://d2nh4f9cbhlobh.cloudfront.net/_uploads/galleries/24921/premier-poster.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img204" term="Vodafone Smart 4 Power" src="http://www.hardwareluxx.de/images/stories/newsbilder/astegmueller/2014/vodafone-smart-4-power_sides1.png"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img205" term="Bob McDonnell" src="http://upload.wikimedia.org/wikipedia/commons/2/28/Bob_McDonnell_by_Gage_Skidmore.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img206" term="Joan Rivers" src="http://www.hollywoodreporter.com/sites/default/files/imagecache/blog_post_349_width/2014/02/joan_rivers.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img207" term="Избави нас от лукавого" src="http://www.kino-teatr.ru/art/3567/42709.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img208" term="忐忑" src="http://news.xinhuanet.com/2011-01/11/12969985_11n.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img209" term="военное положение" src="http://inforesist.org/wp-content/uploads/1404288911_98f2642a5e0d.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img210" term="Galaxy Note Edge" src="http://cdn3.vox-cdn.com/entry_photo_images/10637130/samsung-unpacked-galaxy-note-edge-9_2040_verge_super_wide.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img211" term="Ká" src="http://locitrom.hu/images_blog/user_images/627.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img212" term="Donita" src="http://4.bp.blogspot.com/-onUazbzFHu8/Tw4nSiGCicI/AAAAAAAADvI/CtHGzX0xo_0/s1600/Donita+-+artistsfromasia%255Bdot%255Dblogspot%255Bdot%255Dcom+06.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img213" term="Polska Wenezuela" src="http://bi.gazeta.pl/im/86/ea/fc/z16575110Q,Polska---Wenezuela-juz-dzis--Gdzie-obejrzec-ten-me.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img214" term="The Fappening" src="http://liffestyle.com/wp-content/uploads/2014/09/the-fappening-ariana-grande-jennifer-lawrence-victoria-justice-kate-upton-lead2.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img215" term="Leonor" src="http://www.picturesnew.com/media/images/c8f8e2eb5c.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img216" term="Fiba Live Streaming" src="http://images.globalcraze.com/2014/08/Iran-2BVs-2BSpain-2Bmatch-12-2BFiba-2BWorld-2BCup-2B2014-2Blive-2Bstreaming.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img217" term="Marianne Thyssen" src="http://user.online.be/marianne.thyssen/mt.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img218" term="Valé" src="http://upload.wikimedia.org/wikipedia/commons/f/f9/Vale_Yosemite.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img219" term="Isabel Gemio" src="http://www.hola.com/imagenes/biografias/isabel-gemio/85377-isabel-gemio.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img220" term="Hà" src="http://tintucmoi.org/wp-content/uploads/2013/12/tang-thanh-ha.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img221" term="lupus" src="http://images.medicinenet.com/images/image_collection/skin/systemic-lupus-erythematosus.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img222" term="Roy Andersson" src="http://upload.wikimedia.org/wikipedia/commons/4/4c/Roy_Andersson_vinnare_av_Nordiska_radets_filmpris_2008._Prisutdelningen_i_Helsingfors_2008-10-28.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img223" term="Nicanor Parra" src="http://www.paula.cl/wp-content/uploads/2012/06/nicanor-parra1.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img224" term="Ali Michael" src="http://www.nsmbl.com/wp-content/uploads/2013/07/Ali-Michael-model-crush-49-300x300.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img225" term="Motorola" src="http://cdn2.gsmarena.com/vv/pics/motorola/motorola-motoluxe-xt389-black.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img226" term="Sayisal Loto Sonuclari" src="http://www.eneger.com/wp-content/uploads/2012/12/Say%C4%B1sal-Loto-Sonu%C3%A7lar%C4%B1-01-Aral%C4%B1k-2012-Cumartesi.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img227" term="News" src="http://www.nywaterway.com/UserFiles/Images/2013/LatestNews.jpeg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img228" term="Foto Mesum PNS" src="http://www.dikonews.com/wp-content/uploads/2012/10/Sepasang-Oknum-Guru-PNS-Mesum.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img229" term="Freddie Mercury" src="http://images5.fanpop.com/image/photos/31800000/Freddie-Mercury-HQ-freddie-mercury-31872953-1200-1228.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img230" term="유출" src="http://www.nemopan.com/pan_overseas/files/attach/images/6296/538/283/487cb9d97f222.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img231" term="Bafana Bafana" src="http://drum.co.za/wp-content/uploads/2014/01/bafana-bafana11.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img232" term="義美" src="http://pic.pimg.tw/ken19800813/1308156684-d28624f9aa980aa2428d203454856600_n.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img233" term="James Franco" src="http://nyulocal.com/wp-content/uploads/2013/04/james-franco-movies.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img234" term="Ariana Grande" src="http://www.aceshowbiz.com/images/wennpic/ariana-grande-2013-american-music-awards-04.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img235" term="papiloma humano" src="http://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Papilloma_2009_G1.jpg/200px-Papilloma_2009_G1.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img236" term="ตรวจ" src="http://www.theppanya.com/images/1191655426/1191655701.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img237" term="Christine Theiss" src="http://www2.pictures.zimbio.com/gi/Christine+Theiss+Pj9IrfH8pJHm.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img238" term="Formula 1" src="http://upload.wikimedia.org/wikipedia/commons/f/f0/Ferrari_Formula_1_lineup_at_the_N%C3%BCrburgring.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img239" term="マイケル・チャン" src="http://www.wowow.co.jp/documentary/legend/imgs/top/athlete_image_michael_chang.png"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img240" term="Thomas Thevenoud" src="http://www.thomasthevenoud.fr/wp-content/uploads/2012/05/francois-hollande-thomas-thevenoud.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img241" term="Kanal 5" src="http://upload.wikimedia.org/wikipedia/en/1/14/Kanal5_mk_logo.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img242" term="Bob McDonnell" src="http://images.politico.com/global/2012/06/120606_bob_mcdonnell_gop_605_reut.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img243" term="Kanal 5" src="http://www.kanal5play.se/img/og-kanal5.png"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img244" term="EunB" src="http://media.tumblr.com/601446fcb3a2a74ca4e2cf49c4075d64/tumblr_inline_nbb8guXhSz1qbvwuo.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img245" term="Sofia Vergara" src="http://assets.nydailynews.com/polopoly_fs/1.1766737.1398290195!/img/httpImage/image.jpg_gen/derivatives/gallery_1200/sofia-vergara-1998.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img246" term="王世堅" src="http://upload.wikimedia.org/wikipedia/commons/thumb/5/56/2007TaipeiAudioVideoFair_ShihchienWang.jpg/200px-2007TaipeiAudioVideoFair_ShihchienWang.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img247" term="牛頭牌" src="http://3.bp.blogspot.com/_pGsv9ZMkS6E/S7Azs0UxuLI/AAAAAAAAAJQ/mSoo6EhY_8g/s1600/%E7%89%9B%E9%A0%AD%E7%89%8C%E6%B2%99%E8%8C%B6%E6%8B%B7%E8%B2%9D2.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img248" term="Kei Nishikori" src="http://mkalty.org/wp-content/uploads/2014/03/Kei+Nishikori+2012+Barcelona+Open+Banc+Sabadell+yVrzKWsHn55l.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img249" term="Kaley Cuoco" src="http://www.herinterest.com/wp-content/uploads/2014/03/KaleyCuoco.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img250" term="Eurosport" src="http://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Eurosport_Logo.svg/1280px-Eurosport_Logo.svg.png"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img251" term="Onam" src="http://festivals.iloveindia.com/onam/gifs/onam-celebration.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img252" term="รอยฝันตะวันเดือด" src="http://www.guchill.com/wp-content/uploads/2014/07/rising-sun1.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img253" term="Tony Hawk" src="http://www3.images.coolspotters.com/photos/238680/tony-hawk-profile.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img254" term="James Hunt" src="http://i.telegraph.co.uk/multimedia/archive/02650/laudahunt_2650564b.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img255" term="Eurosport" src="http://upload.wikimedia.org/wikipedia/commons/f/f5/Eurosport_news.png"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img256" term="خالد السرجاني" src="http://media.almasryalyoum.com/News/Large/2014/09/06/248146_0.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img257" term="Моя страна сошла с ума" src="http://www.belaruspartisan.org/upload/iblock/60d/60d9318e5d4a7b40e74d18fdc64af84c.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img258" term="Agnieszka Kaczorowska" src="http://cdn12.se.smcloud.net/t/photos/t/222036/agnieszka_kaczorowska_16730251.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img259" term="جون ريفرز" src="http://www.washwasha.org/wp-content/uploads/2014/03/%D8%AC%D9%88%D9%86-%D8%B1%D9%8A%D9%81%D8%B1%D8%B2-1.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img260" term="Kiraz Mevsimi 9. Bölü" src="http://www.dizisitemiz.com/wp-content/uploads/2014/07/Kiraz-Mevsimi-3.B%C3%B6l%C3%BCm-Fragman%C4%B1-18-Temmuz-Cuma.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img261" term="Komiprisen 2014" src="http://1.vgc.no/drpublish/images/article/2014/09/06/23290398/1/fullbredde/2293230.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img262" term="Josh Gordon" src="http://imgick.cleveland.com/home/cleve-media/pgmain/img/plain-dealer/photo/2013/06/-dc18a0f1b254f05c.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img263" term="onthoofding" src="http://images.fok.nl/upload/070117_272_onthoofd.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img264" term="MH370" src="http://static1.businessinsider.com/image/5326d6c169bedd837727429e/timeline-how-malaysias-flight-mh370-went-missing.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img265" term="Nanosilver" src="http://www.coldtruth.com/wp-content/uploads/2009/11/nanosilver.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img266" term="ประยุทธ์ จันทร์โอชา" src="http://www.talkystory.com/wp-content/uploads/2014/09/272.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img267" term="1 сентября" src="http://bygaga.com.ua/uploads/posts/2013-08/1375810556_otkritki_i_kartinki_na_1_sentyabrya_56-313.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img268" term="Stonehenge" src="http://upload.wikimedia.org/wikipedia/commons/3/3c/Stonehenge2007_07_30.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img269" term="The Voice of Poland" src="http://upload.wikimedia.org/wikipedia/en/1/13/Voice_poland.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img270" term="Carmen Martinez Bordiu" src="http://4.bp.blogspot.com/--aoAvAzExA4/Thdhf8akg5I/AAAAAAAAWEY/XVzHLpKqLzU/s1600/MartinezBordiu.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img271" term="iCloud" src="http://www.mobilegeeks.com/wp-content/uploads/2014/05/icloud.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img272" term="Kell Brook" src="http://images.dailystar-uk.co.uk/dynamic/62/281x351/278048_1.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img273" term="EunB" src="http://cfile8.uf.tistory.com/image/224669385246664308FFDA"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img274" term="地溝油" src="http://1.blog.xuite.net/1/b/8/a/17149096/blog_755782/txt/32942041/0.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img275" term="papiloma humano" src="http://2.bp.blogspot.com/-r1StzNXcj2c/UiyT2r8YR4I/AAAAAAAAAIs/39SJURejCKw/s1600/como-curar-el-papiloma-humano-1.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img276" term="lupus" src="http://img2.timeinc.net/health/images/slides/seal-lupus-400x400.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img277" term="陳喬恩" src="http://pic.pimg.tw/xz445638clk/1311450226-139915f4712d4018dbe04d147f8fee93.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img278" term="Robin Williams" src="http://jewschool.com/wp-content/uploads/2014/08/Robin_Williams.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img279" term="Transfer News" src="http://www.picturesnew.com/media/images/transfer-news.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img280" term="다희" src="http://cfile7.uf.tistory.com/image/16457A3E500BEE320D55A9"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img281" term="Ελλαδα Ρουμανια" src="http://www.naftemporiki.gr/fu/p/730379/638/399/0x00000000008571f3/2/ellada-roumania--23.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img282" term="Жеребьевка Лиги чемпионов" src="https://fbcdn-sphotos-b-a.akamaihd.net/hphotos-ak-ash3/1148897_598013653578434_2013389189_n.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img283" term="Astro AWANI" src="http://img.astroawani.com/2013-04/61365010299_295x200.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img284" term="Sebestyén Balá" src="http://napiaszonline.hu/kepek/no_17043_a.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img285" term="Cricinfo" src="http://avazz.files.wordpress.com/2008/07/cricinfo.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img286" term="ประยุทธ์ จันทร์โอชา" src="http://www.bloggang.com/data/p/peatwalker/picture/1400919745.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img287" term="Sverige Estland Fotboll" src="http://media.webb-tv.nu/2014/09/landskamp-fotboll-tv4-play-live.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img288" term="Bethany Mota" src="http://images6.fanpop.com/image/photos/32900000/Beth-bethany-mota-32924828-500-282.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img289" term="КХЛ" src="http://upload.wikimedia.org/wikipedia/ru/thumb/7/7e/KHL_logo_2012.png/200px-KHL_logo_2012.png"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img290" term="Astro Awani" src="http://static.astroawani.com/images/banner-about-eng.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img291" term="Nônô" src="http://3.bp.blogspot.com/-oB1t72_kZgs/Ulr8rVBqv1I/AAAAAAAABYY/QI0SShHegQI/s1600/n%C3%B4n%C3%B4.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img292" term="Kei Nishikori" src="http://mkalty.org/wp-content/uploads/2014/03/Kei-Nishikori-img6435_668.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img293" term="Μουντομπασκετ" src="http://www.naftemporiki.gr/fu/p/761238/638/399/0x0000000000a258f2/2/klirosi-mountompasket.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img294" term="Royal Adelaide Show" src="http://upload.wikimedia.org/wikipedia/commons/a/a4/Royal_Adelaide_Show.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img295" term="Deutschland Argentinien" src="http://www.tagesspiegel.de/images/goetzetor/10194698/2-format10.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img296" term="Polska Wenezuela" src="http://cdn9.se.smcloud.net/t/photos/t/338869/polska-wenezuela_20596018.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img297" term="Danny Welbeck" src="http://upload.wikimedia.org/wikipedia/commons/6/61/Danny_Welbeck_20120611.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img298" term="Il Principe un amore impossibile" src="http://img.mediaset.it/bin/77.$plit/C_116_articolo_10064_articolo.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img299" term="王世堅" src="http://static.ettoday.net/images/577/d577437.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img300" term="EPL Transfers" src="http://img.bleacherreport.net/img/slides/photos/003/290/804/hi-res-166822609_crop_north.jpg?w=630&h=420&q=75"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img301" term="Зенит" src="http://football-a.com/images/logos/zenit.png"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img302" term="Taken 2" src="http://www.filmofilia.com/wp-content/uploads/2012/07/Taken-2.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img303" term="KSW" src="http://www.mma.pl/wp-content/uploads/2010/11/ksw14.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img304" term="八重樫東" src="http://stat.profile.ameba.jp/profile_images/20121015/19/78/7f/j/o015001501350298269198.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img305" term="El Tiempo" src="http://estaticos01.expansion.com/imagenes/2008/10/17/1224242150_3.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img306" term="地溝油" src="http://img3.wikia.nocookie.net/__cb20100923080542/zh.uncyclopedia/images/6/65/%E5%9C%B0%E6%B2%9F%E6%B2%B97.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img307" term="Wawrinka" src="http://sports.inquirer.net/files/2014/04/Stanislas-Wawrinka-0421.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img308" term="Anita Witzier" src="http://upload.wikimedia.org/wikipedia/commons/7/74/Anita_Witzier_2010.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img309" term="Il Principe un amore impossibile" src="http://images.davidemaggio.it/pics3/2014/09/Il-Principe-Un-amore-impossibile-4-150x150.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img310" term="hå" src="http://www.lelloarnell.com/files/imagecache/full_width_750px/images/exhibitions/webimage.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img311" term="Andreas Gabalier" src="http://wiwibloggs.com/wp-content/uploads/2014/08/Andreas+Gabalier+Das+Herbstfest+Der+Abenteuer+U8RK2yOvb1Tl.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img312" term="click" src="http://www.fantom-xp.com/wallpapers/36/Adam_Sandler_-_Click.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img313" term="ประยุทธ์ จันทร์โอชา" src="http://static.naewna.com/uploads/userfiles/images/C_1-P_3-%E0%B8%9E%E0%B8%A5_%E0%B8%AD(1).jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img314" term="Узнай Меня Если Сможешь" src="http://www.vokrug.tv/pic/product/6/8/8/c/688c5d31aa928a25dfecf175a7ab52c5.jpeg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img315" term="รอยฝันตะวันเดือด" src="http://entertain.teenee.com/thaistarphoto/img6/757662.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img316" term="Josh Gordon" src="http://www.rotoprofessor.com/football/pictures/JGordon.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img317" term="Deutschland Schottland" src="http://www.fahnenversand.de/shop/images/artikel/765.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img318" term="Twitpic" src="https://pbs.twimg.com/profile_images/1695197720/twitpic-camera-icon_400x400.png"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img319" term="로또" src="http://cfs8.blog.daum.net/image/15/blog/2009/04/20/14/29/49ec082b414ef"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img320" term="Ariana Grande" src="http://i.dailymail.co.uk/i/pix/2014/03/30/article-2592584-1CAE6C3F00000578-588_634x851.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img321" term="Paul Walker" src="http://upload.wikimedia.org/wikipedia/commons/9/91/PaulWalkerEdit-1.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img322" term="유민아빠" src="http://archivenew.vop.co.kr/images/3264dab5a60b54204e686c661378fc46/2014-08/07063317_A96U1506.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img323" term="TIFF" src="http://www.zan1011.com/img_tiff.gif"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img324" term="Ottawa Weather" src="http://www.ottawacitizen.com/cms/binary/1126579.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img325" term="revista Veja" src="http://www.robsonpiresxerife.com/blog/wp-content/uploads/2013/01/lula-veja-fevereiro.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img326" term="ออมสิน" src="http://www.challengemetutor.com/article/art_41992561.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img327" term="Polska Wenezuela" src="http://3.storage2.sportowefakty.pl/photo_thumbnail/5408c8754894f2_20905969.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img328" term="Forma 1" src="http://www.villa-alexander.ch/images/gallery/8_41_pic_forma-1.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img329" term="ตรวจ" src="http://www.manager.co.th/asp-bin/Image.aspx?ID=2423397"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img330" term="秦昊" src="http://img1.ahtv.cn/material/news/img/640x/2014/02/8def35b7c805dffadafe583f8ef7ab28.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img331" term="Αντωνησ Βαρδησ Τραγουδια" src="http://offsite.com.cy/wp-content/uploads/2014/09/vardis.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img332" term="Chelsea Vs Everton" src="http://i.telegraph.co.uk/multimedia/archive/02439/pienaar_2439201b.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img333" term="Hot Sale" src="http://image.shutterstock.com/display_pic_with_logo/1196897/111512069/stock-vector-eps-vector-hot-sale-tags-with-sale-percent-text-on-red-square-background-111512069.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img334" term="EunB" src="http://www.gokpop.com/i1/artists/hero/2/1523-eunb-pai1.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img335" term="Мистраль" src="http://demotivation.me/images/20120207/vvoynpch7v0h.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img336" term="The Voice of Poland" src="http://images6.fanpop.com/image/photos/36100000/The-Voice-of-Poland-image-the-voice-of-poland-36194415-764-509.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img337" term="Andreas Gabalier" src="http://www.woman.at/mywoman/static/wordrap/images/andreasgabalier_iwoman.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img338" term="Onam" src="http://festivalszone.com/upload/1363261762Onam-Festival.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img339" term="Komiprisen 2014" src="http://gfx.nrk.no//Lepvq38Ci_IKfBl90oV36AkOmEQxVAKz-r5tzbGed9Sw"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img340" term="葡萄姐" src="http://static.ettoday.net/images/724/724446.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img341" term="News" src="https://www.vitesse.com/images/news_events/blog6.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img342" term="地溝油" src="http://www.hb.xinhuanet.com/zhuanti/xin_1130307221431265245146.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img343" term="Κηδεια Βαρδη" src="http://www.entertv.gr/sites/default/files/miscfiles/maragkozi1.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img344" term="Ariana Grande" src="http://pmchollywoodlife.files.wordpress.com/2012/08/ariana-grande-bio-pic.jpg?w=300"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img345" term="جون ريفرز" src="http://www.araa.com/data/large_thumbs/16_04_13_035849_1887381.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img346" term="Bethany Mota" src="http://media-cache-ak0.pinimg.com/236x/07/1a/5a/071a5af5ddd855156274872aa4fa1914.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img347" term="Onam" src="http://festival-images.designdecor.in/festival-images/onam/Onam6.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img348" term="로또" src="http://pds7.egloos.com/pds/200709/23/10/251_lotto.bmp"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img349" term="地溝油" src="http://www.e-zone.com.hk/discuz/attachment.php?aid=37728&nothumb=yes"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img350" term="Seleccion Colombia" src="http://www.eluniversal.com.co/sites/default/files/201201/imagen/seleccion_colombia_10.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img351" term="Ladies Code" src="http://4.bp.blogspot.com/-4DGRMAVqP3U/UV7vSjoPn8I/AAAAAAAAABI/u-JkhEBp-Ck/s1600/ladies+code.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img352" term="Linnea Myhre" src="https://studentersamfundet.no/wp/wp-content/uploads/2013/08/Myhre_4412683a.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img353" term="地溝油" src="http://1.blog.xuite.net/1/b/8/a/17149096/blog_755782/txt/32942041/0.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img354" term="Ladies Code" src="http://images.kpopstarz.com/data/images/full/2013/03/06/56455-ladies-code-reveals-debut-album-jacket-photo-bad-girls.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img355" term="جون ريفرز" src="http://www.washwasha.org/wp-content/uploads/2014/03/%D8%AC%D9%88%D9%86-%D8%B1%D9%8A%D9%81%D8%B1%D8%B2.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img356" term="地溝油" src="http://img3.wikia.nocookie.net/__cb20100923080542/zh.uncyclopedia/images/6/65/%E5%9C%B0%E6%B2%9F%E6%B2%B97.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img357" term="Linnea Myhre" src="http://gfx.dagbladet.no/labrador/172/172033/17203373/jpg/active/978x.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img358" term="جون ريفرز" src="http://cdn.nc.slabnews.com/public/uploads/images/85588122531771660.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img359" term="Linnea Myhre" src="http://gfx.dagbladet.no/labrador/154/154430/15443030/jpg/active/978x.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img360" term="Linnea Myhre" src="http://ubok.no/media/Linnea%20Myhre.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img361" term="Linnea Myhre" src="https://studentersamfundet.no/wp/wp-content/uploads/2013/08/Myhre_4412683a.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img362" term="Kilchberger Schwinget" src="http://www.kilchberger-schwinget.ch/pictures/schwinget3.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img363" term="Kilchberger Schwinget" src="http://www.schlussgang.ch/sites/default/files/styles/article_detail/public/sg_2014_06_17_40-arena2002.jpg?itok=JuYnzMyL"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img364" term="جون ريفرز" src="http://www.washwasha.org/wp-content/uploads/2014/03/%D8%AC%D9%88%D9%86-%D8%B1%D9%8A%D9%81%D8%B1%D8%B2-1.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img365" term="Kilchberger Schwinget" src="http://www.kilchberger-schwinget.ch/pictures/schwinget2.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img366" term="Linnea Myhre" src="http://gfx.dagbladet.no/labrador/172/172033/17203373/jpg/active/978x.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img367" term="Kilchberger Schwinget" src="http://f.blick.ch/img/aktuell/crop1150262/1632815929-chorizontal-w308/Kilchberger.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img368" term="Kilchberger Schwinget" src="http://www.kilchberger-schwinget.ch/pictures/schwinget3.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img369" term="Linnea Myhre" src="http://gfx.dagbladet.no/labrador/154/154430/15443030/jpg/active/978x.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img370" term="Kilchberger Schwinget" src="http://www.schlussgang.ch/sites/default/files/styles/article_detail/public/sg_2014_06_17_40-arena2002.jpg?itok=JuYnzMyL"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img371" term="Linnea Myhre" src="http://ubok.no/media/Linnea%20Myhre.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img372" term="Linnea Myhre" src="https://studentersamfundet.no/wp/wp-content/uploads/2013/08/Myhre_4412683a.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img373" term="Kilchberger Schwinget" src="http://www.kilchberger-schwinget.ch/pictures/schwinget2.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img374" term="Linnea Myhre" src="http://gfx.dagbladet.no/labrador/172/172033/17203373/jpg/active/978x.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img375" term="Linnea Myhre" src="http://gfx.dagbladet.no/labrador/154/154430/15443030/jpg/active/978x.jpg"></div>
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img376" term="Kilchberger Schwinget" src="http://f.blick.ch/img/aktuell/crop1150262/1632815929-chorizontal-w308/Kilchberger.jpg"></div>
+
+<div class="stage"><a href="#" class="stage_term"></a><img class="audio_img" onerror="this.src='images/noimg.jpg';" id="img377" term="。。。" src="images/noimg.jpg"></div>
+
+
+      <div id="termwrap">
+        <h1 id="term"><span class="ellipses">。</span><a href="#" id="clicktostart" style="display: none;">Click to start</a></h1>
+      </div>
+    </div>
+    
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="js/l_imgswitch.js"></script>
+    <script>
+      function setSize(){
+        var winwidth = window.innerWidth;
+        var winheight = window.innerHeight;
+        var wrapper = $('#wrapper');
+        
+        wrapper.css('left', (winwidth/2 - 500/2) + 'px');
+        wrapper.css('top', (winheight/2 - 500/2) + 'px');
+      }
+      
+      window.onload = function(event){setSize();}
+      window.resize = function(event){setSize();}
+    </script>
+  </body>
+</html>
